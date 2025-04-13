@@ -3,6 +3,7 @@ import './App.css';
 import Create from './routes/Create';
 import Gallery from './routes/Gallery';
 import Home from './routes/Home';
+import Update from './routes/Update';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/create" element={<Create />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/update" element={<Update />} />
         </Routes>
       </div>
     </div>

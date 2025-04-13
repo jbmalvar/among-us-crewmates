@@ -26,14 +26,17 @@ function Gallery() {
         <h1>{'Gallery'}</h1>
         {
             posts && posts.length > 0 ?
-            posts.map((post) => 
-              <Card 
-                name={post.name} 
-                speed={post.speed} 
-                color={post.color} 
-                created_at={post.created_at} 
-              />
-            ) 
+            <div className="card-container">
+              {posts.map((post, index) => 
+                <Card 
+                  key={index}
+                  name={post.name} 
+                  speed={post.speed} 
+                  color={post.color} 
+                  created_at={post.created_at} 
+                />
+              )}
+            </div>
             : 
             <>
               <h2>{'You haven\'t made anything yet'}</h2>
