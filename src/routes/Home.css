@@ -1,0 +1,23 @@
+.Home {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers items horizontally */
+    justify-content: center; /* Centers items vertically */
+    height: 100vh; /* Full viewport height */
+    width: 100%; /* Full width */
+    max-width: 1400px;
+    margin: 0 auto; /* Centers the container horizontally if needed */
+    text-align: center; /* Ensures text is centered */
+}
+.homeTitle {
+    font-size: 48px;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.homeDesc {
+    font-size: 18px;
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
