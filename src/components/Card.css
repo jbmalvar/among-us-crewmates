@@ -1,0 +1,33 @@
+.Card {
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    background-color: #fff;
+    text-align: center;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .card-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .card-speed,
+  .card-color,
+  .card-created_at {
+    font-size: 1.2rem;
+    color: #555;
+    margin: 5px 0;
+  }

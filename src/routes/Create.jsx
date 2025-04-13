@@ -1,7 +1,39 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import './Create.css'
+import { supabase } from '../client.js'
 
 function Create() {
+  event.preventDefault()
+
+  const nameRef = useRef(null)
+  const speedRef = useRef(null)
+  const [color, setColor] = useState('')
+
+  const createCrewmate = async (event) => {
+    event.preventDefault()
+    const name = nameRef.current.value
+    const speed = speedRef.current.value
+
+    if (!color) {
+      alert('Please select a color!');
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('Crewmates')
+      .insert([{ name: name, speed: speed, color: color }])
+      .select()
+
+    if (error) {
+      console.error(error);
+      alert(error.message)
+    } else {
+      alert('Crewmate Created!')
+      nameRef.current.value = '';
+      speedRef.current.value = '';
+      setColor('');
+    }
+  }
 
   return (
     <>
@@ -11,43 +43,31 @@ function Create() {
         <div className='inputContainer'>
           <span className ="inputSpan">
             <label className="inputLabel">Crewmate Name:</label>
-            <input type="text" placeholder="Enter Crewmate Name" className="inputField"></input>
+            <input type="text" placeholder="Enter Crewmate Name" className="inputField" ref={nameRef}></input>
           </span>
           <span className ="inputSpan">
-            <label className="inputLabel">Crewmate Name:</label>
-            <input type="text" placeholder="Enter Crewmate Name" className="inputField"></input>
+            <label className="inputLabel">Speed (mph):</label>
+            <input type="text" placeholder="Enter Crewmate Name" className="inputField" ref={speedRef}></input>
           </span>
           <span className="inputRadio">
             <label className="inputLabel">Color:</label>
             <div className="radioOptions">
-              <label>
-                <input type="radio" name="role" value="red" className="inputField" /> Red
-              </label>
-              <label>
-                <input type="radio" name="role" value="green" className="inputField" /> Green
-              </label>
-              <label>
-                <input type="radio" name="role" value="blue" className="inputField" /> Blue
-              </label>
-              <label>
-                <input type="radio" name="role" value="purple" className="inputField" /> Purple
-              </label>
-              <label>
-                <input type="radio" name="role" value="yellow" className="inputField" /> Yellow
-              </label>
-              <label>
-                <input type="radio" name="role" value="orange" className="inputField" /> Orange
-              </label>
-              <label>
-                <input type="radio" name="role" value="pink" className="inputField" /> Pink
-              </label>
-              <label>
-                <input type="radio" name="role" value="rainbow" className="inputField" /> Rainbow
-              </label>
+              {['red', 'green', 'blue', 'purple', 'yellow', 'orange', 'pink', 'rainbow'].map((colorOption) => (
+                <label key={colorOption}>
+                  <input
+                    type="radio"
+                    name="color"
+                    value={colorOption}
+                    className="inputField"
+                    onChange={(e) => setColor(e.target.value)}
+                  />{' '}
+                  {colorOption.charAt(0).toUpperCase() + colorOption.slice(1)}
+                </label>
+              ))}
             </div>
           </span>
         </div>
-        <button>Create</button>
+        <button className = "createBut" onClick={createCrewmate}>Create</button>
       </div>
     </>
   )

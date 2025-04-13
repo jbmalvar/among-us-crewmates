@@ -39,12 +39,14 @@
     margin: 15px auto;
     text-align: center; /* Ensures text is centered */
     font-size: 20px;
-    background-color: grey;
+    background-color: #28282B;
     border-radius: 20px;
+    padding: 10px;
 }
 
 .inputRadio {
     height: auto;
+    padding: 10px; /* Add some padding for better spacing */
 }
 
 .radioOptions {
@@ -62,4 +64,11 @@
     display: flex;
     align-items: center; /* Align the label text with the radio button */
     gap: 5px; /* Add spacing between the radio button and the label text */
+}
+
+.createBut {
+    height: 40px;
+    width: 100px;
+    background-color: #28282B;
+    color: white;
 }
