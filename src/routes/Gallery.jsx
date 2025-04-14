@@ -34,6 +34,20 @@ function Gallery() {
                   speed={post.speed} 
                   color={post.color} 
                   created_at={post.created_at} 
+                  onEdit={() => navigate(`/update?id=${post.id}`)} 
+                  onDelete={async () => {
+                    const { error } = await supabase
+                      .from('Crewmates')
+                      .delete()
+                      .eq('id', post.id);
+                    if (error) {
+                      console.error(error);
+                      alert(error.message);
+                    } else {
+                      alert('Crewmate Deleted!');
+                      setPosts(posts.filter(p => p.id !== post.id));
+                    }
+                  }}
                 />
               )}
             </div>

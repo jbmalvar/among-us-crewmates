@@ -1,53 +1,98 @@
-import { useState, useRef } from 'react'
-import './Create.css'
-import { supabase } from '../client.js'
+import { useState, useRef, useEffect } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import './Create.css';
+import { supabase } from '../client.js';
+import Card from '../components/Card'; // Import the Card component
 
 function Update() {
-  event.preventDefault()
+  const [searchParams] = useSearchParams();
+  const crewmateId = searchParams.get('id');
 
-  const nameRef = useRef(null)
-  const speedRef = useRef(null)
-  const [color, setColor] = useState('')
+  const nameRef = useRef(null);
+  const speedRef = useRef(null);
+  const [color, setColor] = useState('');
+  const [crewmateData, setCrewmateData] = useState(null); // State to store crewmate data
+  const navigate = useNavigate();
 
-  const createCrewmate = async (event) => {
-    event.preventDefault()
-    const name = nameRef.current.value
-    const speed = speedRef.current.value
+  useEffect(() => {
+    const fetchCrewmate = async () => {
+      const { data, error } = await supabase
+        .from('Crewmates')
+        .select()
+        .eq('id', crewmateId)
+        .single();
+
+      if (data) {
+        nameRef.current.value = data.name;
+        speedRef.current.value = data.speed;
+        setColor(data.color);
+        setCrewmateData(data); // Store fetched data in state
+      }
+
+      if (error) {
+        console.error(error);
+        alert('Error fetching crewmate data');
+      }
+    };
+
+    if (crewmateId) {
+      fetchCrewmate();
+    }
+  }, [crewmateId]);
+
+  const updateCrewmate = async (event) => {
+    event.preventDefault();
+    const name = nameRef.current.value;
+    const speed = speedRef.current.value;
 
     if (!color) {
       alert('Please select a color!');
       return;
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('Crewmates')
-      .insert([{ name: name, speed: speed, color: color }])
-      .select()
+      .update({ name, speed, color })
+      .eq('id', crewmateId);
 
     if (error) {
       console.error(error);
-      alert(error.message)
+      alert(error.message);
     } else {
-      alert('Crewmate Created!')
-      nameRef.current.value = '';
-      speedRef.current.value = '';
-      setColor('');
+      alert('Crewmate Updated!');
+      navigate('/gallery');
     }
-  }
+  };
 
   return (
     <>
-      <div className = "Create">
-        <h1 className = "createTitle">Update a Crew Member</h1>
-        <img src="https://static.wikia.nocookie.net/the-sidaba-bunch/images/0/03/AMONGUS2.png"></img>
-        <div className='inputContainer'>
-          <span className ="inputSpan">
+      <div className="Create">
+        <h1 className="createTitle">View/Edit</h1>
+        {crewmateData && <h2 className="">{crewmateData.name}</h2>}
+        {}
+        {crewmateData && (
+          <Card
+            name={crewmateData.name}
+            speed={crewmateData.speed}
+            color={crewmateData.color}
+            created_at={crewmateData.created_at}
+          />
+        )}
+        {crewmateData && (
+            <p>
+              {crewmateData.speed < 25 && "Slow ahh crewmate"}
+              {crewmateData.speed >= 25 && crewmateData.speed <= 100 && "He's moving"}
+              {crewmateData.speed > 100 && ">:) Speed Demon"}
+            </p>
+          )}
+        <div className="inputContainer">
+          <span className="inputSpan">
             <label className="inputLabel">Crewmate Name:</label>
             <input type="text" placeholder="Enter Crewmate Name" className="inputField" ref={nameRef}></input>
           </span>
-          <span className ="inputSpan">
+          <span className="inputSpan">
             <label className="inputLabel">Speed (mph):</label>
-            <input type="text" placeholder="Enter Crewmate Name" className="inputField" ref={speedRef}></input>
+            <input type="text" placeholder="Enter Speed" className="inputField" ref={speedRef}></input>
           </span>
           <span className="inputRadio">
             <label className="inputLabel">Color:</label>
@@ -59,6 +104,7 @@ function Update() {
                     name="color"
                     value={colorOption}
                     className="inputField"
+                    checked={color === colorOption}
                     onChange={(e) => setColor(e.target.value)}
                   />{' '}
                   {colorOption.charAt(0).toUpperCase() + colorOption.slice(1)}
@@ -67,10 +113,13 @@ function Update() {
             </div>
           </span>
         </div>
-        <button className = "createBut" onClick={createCrewmate}>Create</button>
+        <div className='buttonContainer'> 
+          <button className="createBut" onClick={() => navigate('/gallery')}>Back</button>
+          <button className="createBut" onClick={updateCrewmate}>Update</button>
+        </div>
       </div>
     </>
-  )
+  );
 }
 
-export default Update
+export default Update;
