@@ -61,6 +61,8 @@ GIF created with ...
 
 Video record to Canva Convert to gif
 
+imgur link in case: https://imgur.com/a/wln55mb
+
 ## Notes
 
 Describe any challenges encountered while building the app.
